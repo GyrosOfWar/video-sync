@@ -1,0 +1,19 @@
+# To-Do:
+- [ ] Create collection with rooms
+    - Generated alphanumeric/word-based? ID
+    - Participants (Array)
+        - Generated/chosen name
+        - IP address?
+        - Unique ID
+    - Current video (details TBD)
+    - Playlist contents (details TBD)
+- [ ] Creating a room:
+    - Create a new room in the database
+    - Navigate to `/room/{id}`
+    - Create websocket to `/ws/room/{id}`
+- [ ] Start a video
+    - Client who requests the video sends a message to `/ws/room/{id}`: `{"type": "AddVideo", "url": "http://example.com"}` (details TBD)
+    - Server adds video to room's playlist
+    - Server does preparations (fetch video if necessary?)
+    - Server sends WS message to all room participats: `{"type": "StartVideo", "serverTime": 1234567}` (details TBD)
+    - Clients periodically send their current video position to the server to make sure they stay in sync
