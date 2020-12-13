@@ -1,11 +1,13 @@
-import { Module } from "@nestjs/common"
-import { AppController } from "./app.controller"
-import { AppService } from "./app.service"
-import { MongooseModule } from "@nestjs/mongoose"
+import {Module} from "@nestjs/common"
+import {MongooseModule} from "@nestjs/mongoose"
+import {RoomModule} from "./room/room.module"
 
 @Module({
-  imports: [MongooseModule.forRoot("mongodb://localhost/video-sync")],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MongooseModule.forRoot("mongodb://localhost/video-sync"),
+    RoomModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
