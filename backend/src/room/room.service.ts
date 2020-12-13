@@ -2,25 +2,9 @@ import {Injectable} from "@nestjs/common"
 import {InjectModel} from "@nestjs/mongoose"
 import {Model} from "mongoose"
 import {v4 as newUuid} from "uuid"
-import {readFileSync} from "fs"
-import {join} from "path"
 import {Room, RoomDocument} from "src/schemas/room.schema"
 import {CreateRoomDto} from "./room.controller"
-
-function readLines(path: string): string[] {
-  return readFileSync(path, {encoding: "utf-8"})
-    .split("\n")
-    .map((s) => s.trim().toLowerCase())
-    .filter((s) => s.length > 0)
-}
-
-function randomInt(upperBound: number): number {
-  return Math.floor(Math.random() * upperBound)
-}
-
-function resourcePath(filename: string): string {
-  return join(__dirname, "..", "..", "resources", filename)
-}
+import {randomInt, readLines, resourcePath} from "src/utils"
 
 const animals = readLines(resourcePath("animals.txt"))
 const adjectives = readLines(resourcePath("adjectives.txt"))
@@ -37,7 +21,11 @@ export class RoomService {
   constructor(@InjectModel(Room.name) private roomModel: Model<RoomDocument>) {}
 
   async findAll(): Promise<Room[]> {
-    return this.roomModel.find().exec()
+    return await this.roomModel.find().exec()
+  }
+
+  async delete(id: string) {
+    this.roomModel.deleteOne({_id: id})
   }
 
   async create(room: CreateRoomDto, ipAddress: string): Promise<Room> {
@@ -51,6 +39,6 @@ export class RoomService {
     }
     model.participants = [participant]
 
-    return model.save()
+    return await model.save()
   }
 }

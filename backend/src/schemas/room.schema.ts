@@ -17,6 +17,9 @@ export interface PlaylistEntry {
 
 @Schema()
 export class Room {
+  @Prop()
+  _id!: string
+
   @Prop({required: true})
   name!: string
 

@@ -1,5 +1,5 @@
 # To-Do:
-- [ ] Create collection with rooms
+- [X] Create collection with rooms
     - Generated alphanumeric/word-based? ID
     - Participants (Array)
         - Generated/chosen name

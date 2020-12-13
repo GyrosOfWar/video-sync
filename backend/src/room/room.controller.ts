@@ -1,6 +1,7 @@
-import {Body, Controller, Get, Ip, Post} from "@nestjs/common"
+import {Body, Controller, Delete, Get, Ip, Post} from "@nestjs/common"
 import {Room} from "src/schemas/room.schema"
 import {RoomService} from "./room.service"
+import {log} from "../utils"
 
 export class CreateRoomDto {
   readonly name?: string
@@ -11,9 +12,12 @@ export class CreateRoomDto {
 export class RoomController {
   constructor(private roomService: RoomService) {}
 
+  private log = log.child({class: "RoomController"})
+
   @Get()
   async findAll(): Promise<Room[]> {
-    return this.roomService.findAll()
+    this.log.info("finding all rooms")
+    return await this.roomService.findAll()
   }
 
   @Post()
@@ -21,6 +25,6 @@ export class RoomController {
     @Body() room: CreateRoomDto,
     @Ip() ipAddress: string
   ): Promise<Room> {
-    return this.roomService.create(room, ipAddress)
+    return await this.roomService.create(room, ipAddress)
   }
 }
