@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// From https://github.com/gremo/nest-winston/blob/652ee2c197722d01d3a9761f9ea115e42023dfdb/src/winston.classes.ts
 import {Logger} from "winston"
 import {LoggerService} from "@nestjs/common"
 
