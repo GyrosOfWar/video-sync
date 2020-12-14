@@ -17,7 +17,18 @@ export function resourcePath(filename: string): string {
   return join(__dirname, "..", "resources", filename)
 }
 
+const logFormat = winston.format.printf(
+  ({level, message, class: cls, timestamp}) => {
+    return `${timestamp} [${cls || "unknown"}] ${level}: ${message}`
+  }
+)
+
 export const log = winston.createLogger({
   transports: [new winston.transports.Console()],
   level: "info",
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.timestamp({format: "DD.MM.YYYY HH:MM:ss"}),
+    logFormat
+  ),
 })
