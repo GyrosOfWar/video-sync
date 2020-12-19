@@ -13,7 +13,7 @@ export interface PlaylistEntry {
   addedAt: Date
 }
 
-interface Room {
+export interface Room {
   _id: string
   name: string
   participants: Participant[]
@@ -55,8 +55,6 @@ const Home = () => {
 
   return (
     <div css={tw`flex flex-col`}>
-      <h1 css={tw`text-3xl font-bold mb-4`}>video-sync</h1>
-
       <div css={tw`self-center`}>
         <button
           onClick={onCreateRoom}

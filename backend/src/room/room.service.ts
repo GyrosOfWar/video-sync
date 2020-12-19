@@ -28,6 +28,10 @@ export class RoomService {
     this.roomModel.deleteOne({_id: id})
   }
 
+  async findOne(id: string): Promise<Room | null> {
+    return this.roomModel.findOne({_id: id})
+  }
+
   async create(room: CreateRoomDto, ipAddress: string): Promise<Room> {
     const model = new this.roomModel(room)
     model.createdAt = new Date()

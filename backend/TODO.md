@@ -7,12 +7,12 @@
         - Unique ID
     - Current video (details TBD)
     - Playlist contents (details TBD)
-- [ ] Creating a room:
+- [X] Creating a room:
     - Create a new room in the database
     - Navigate to `/room/{id}`
     - Create websocket to `/ws/room/{id}`
 - [ ] Start a video
-    - Client who requests the video sends a message to `/ws/room/{id}`: `{"type": "AddVideo", "url": "http://example.com"}` (details TBD)
+    - Client who requests the video sends a message to `/ws/room/{id}`: `{"event": "AddVideo", "url": "http://example.com"}` (details TBD)
     - Server adds video to room's playlist
     - Server does preparations (fetch video if necessary?)
     - Server sends WS message to all room participats: `{"type": "StartVideo", "serverTime": 1234567}` (details TBD)

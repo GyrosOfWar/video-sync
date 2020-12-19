@@ -15,7 +15,7 @@ interface OnConnection {
 export class RoomGateway {
   @SubscribeMessage("connect")
   onConnect(client: any, data: OnConnection): Observable<WsResponse<number>> {
-    log.info(`data: '${data}'`)
+    log.info(`roomId: '${data.roomId}'`)
     return from([1, 2, 3]).pipe(map((item) => ({event: "events", data: item})))
   }
 }
