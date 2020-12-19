@@ -1,8 +1,14 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  purge: {
+    content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+    enabled: process.env.NODE_ENV === "production",
+  },
   darkMode: 'media',
   theme: {
-    extend: {},
+    container: {
+      center: true,
+      padding: "0.5rem",
+    },
   },
   variants: {
     extend: {},

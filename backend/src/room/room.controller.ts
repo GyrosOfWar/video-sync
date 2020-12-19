@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Ip, Post} from "@nestjs/common"
+import {Body, Controller, Get, Ip, Post} from "@nestjs/common"
 import {Room} from "src/schemas/room.schema"
 import {RoomService} from "./room.service"
 import {log} from "../utils"

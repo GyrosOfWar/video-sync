@@ -38,6 +38,7 @@ export class RoomService {
       id: newUuid(),
     }
     model.participants = [participant]
+    model._id = newUuid()
 
     return await model.save()
   }
