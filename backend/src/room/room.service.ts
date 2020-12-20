@@ -2,9 +2,9 @@ import {Injectable} from "@nestjs/common"
 import {InjectModel} from "@nestjs/mongoose"
 import {Model} from "mongoose"
 import {v4 as newUuid} from "uuid"
-import {Room, RoomDocument} from "src/schemas/room.schema"
-import {CreateRoomDto} from "./room.controller"
+import {PlaylistEntry, Room, RoomDocument} from "src/schemas/room.schema"
 import {randomInt, readLines, resourcePath} from "src/utils"
+import {CreateRoomResponse} from "./room.controller"
 
 const animals = readLines(resourcePath("animals.txt"))
 const adjectives = readLines(resourcePath("adjectives.txt"))
@@ -28,22 +28,50 @@ export class RoomService {
     this.roomModel.deleteOne({_id: id})
   }
 
-  async findOne(id: string): Promise<Room | null> {
+  async findOne(id: string): Promise<RoomDocument | null> {
     return this.roomModel.findOne({_id: id})
   }
 
-  async create(room: CreateRoomDto, ipAddress: string): Promise<Room> {
-    const model = new this.roomModel(room)
+  async create(ipAddress: string): Promise<CreateRoomResponse> {
+    const model = new this.roomModel({})
     model.createdAt = new Date()
     model.playlist = []
+    // todo custom function
+    model.name = generateUserName()
     const participant = {
-      name: room.participantName || generateUserName(),
+      name: generateUserName(),
       ipAddress,
       id: newUuid(),
     }
     model.participants = [participant]
     model._id = newUuid()
+    await model.save()
 
-    return await model.save()
+    return {
+      roomName: model.name,
+      roomId: model._id,
+      userName: participant.name,
+      userId: participant.id,
+    }
+  }
+
+  async addVideo(
+    roomId: string,
+    videoUrl: string,
+    userId: string
+  ): Promise<void> {
+    const entry: PlaylistEntry = {
+      url: videoUrl,
+      addedAt: new Date(),
+      addedByUser: userId,
+    }
+
+    const room = await this.findOne(roomId)
+    if (!room) {
+      throw new Error("Failed to find room with ID " + roomId)
+    }
+
+    room.playlist.push(entry)
+    await room.save()
   }
 }

@@ -1,16 +1,17 @@
-import {useEffect, useRef, useState} from "react"
+import {FormEventHandler, useEffect, useRef, useState} from "react"
 import {useParams} from "react-router-dom"
+import tw from "twin.macro"
 import {Room} from "./Home"
 
 interface Message {
-  type: string
+  event: string
   data: any
 }
 
 const useWebsocket = (
   url: string,
   messageHandler: (message: Message) => void,
-  initialMessage: any
+  initialMessage: Message
 ) => {
   useEffect(() => {
     const ws = new WebSocket(url)
@@ -30,22 +31,20 @@ const useWebsocket = (
 const RoomView: React.FC = () => {
   const {id} = useParams()
   const [room, setRoom] = useState<Room | null>(null)
-  const [currentVideo, setCurrentVideo] = useState(null)
   const [error, setError] = useState<Error | null>(null)
-  const messages = useRef<any[]>([])
+  const [videoUrlInput, setVideoUrlInput] = useState("")
 
-  useWebsocket(
-    "ws://localhost:3010",
-    (message) => {
-      messages.current.push(message)
+  // TODO "register" as new user if this is null
+  const userId = window.localStorage.getItem("userId")
+  const videoElement = useRef<HTMLVideoElement>(null)
+
+  useWebsocket("ws://localhost:3090/ws/room", (message) => {}, {
+    event: "connect",
+    data: {
+      roomId: id,
+      userId: userId,
     },
-    {
-      event: "connect",
-      data: {
-        roomId: id,
-      },
-    }
-  )
+  })
 
   const fetchRoom = async (id: string): Promise<void> => {
     try {
@@ -58,14 +57,56 @@ const RoomView: React.FC = () => {
     }
   }
 
+  const onAddVideo: FormEventHandler = async (e) => {
+    e.preventDefault()
+    
+    const params = new URLSearchParams({
+      url: videoUrlInput,
+      userId: userId || "",
+    })
+
+    const response = await fetch(`/api/rooms/${id}/video?${params.toString()}`, {
+      method: "POST"
+    })
+
+    if (!response.ok) {
+      const json = await response.json()
+      setError(json)
+    }
+  }
+
   useEffect(() => {
     fetchRoom(id)
   }, [id])
 
+  if (!room) {
+    return <p>Loading...</p>
+  }
+
   return (
-    <ul>
+    <>
       {error && <p>{error.message}</p>}
-    </ul>
+      <h1 css={tw`text-3xl font-bold`}>
+        Welcome to room <code>{room.name}</code>!
+      </h1>
+
+      <form onSubmit={onAddVideo}>
+        <label css={tw`dark:text-gray-200 mr-2 inline-block`}>Add video</label>
+        <input
+          type="text"
+          css={tw`inline-block dark:bg-gray-700 dark:text-black`}
+          placeholder="Enter URL..."
+          value={videoUrlInput}
+          onChange={(e) => setVideoUrlInput(e.target.value)}
+        />
+
+        <button type="submit">
+          Submit
+        </button>
+      </form>
+
+      <video ref={videoElement}></video>
+    </>
   )
 }
 

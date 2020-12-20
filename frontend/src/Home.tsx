@@ -21,6 +21,13 @@ export interface Room {
   createdAt: Date
 }
 
+export interface CreateRoomResponse {
+  roomName: string
+  roomId: string
+  userName: string
+  userId: string
+}
+
 const Icon: React.FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -44,13 +51,12 @@ const Home = () => {
   const onCreateRoom = async () => {
     const response = await fetch("/api/rooms", {
       method: "POST",
-      body: JSON.stringify({
-        name: "cool-room",
-      }),
       headers: {"Content-Type": "application/json"},
     })
-    const data: Room = await response.json()
-    navigate(`/rooms/${data._id}`)
+    const data: CreateRoomResponse = await response.json()
+    window.localStorage.setItem("userId", data.userId)
+
+    navigate(`/rooms/${data.roomId}`)
   }
 
   return (

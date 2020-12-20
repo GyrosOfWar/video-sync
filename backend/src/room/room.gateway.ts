@@ -9,9 +9,10 @@ import {log} from "src/utils"
 
 interface OnConnection {
   roomId: string
+  userId: string
 }
 
-@WebSocketGateway(3010)
+@WebSocketGateway({path: "/ws/room"})
 export class RoomGateway {
   @SubscribeMessage("connect")
   onConnect(client: any, data: OnConnection): Observable<WsResponse<number>> {
