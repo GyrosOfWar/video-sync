@@ -14,9 +14,11 @@ interface OnConnection {
 
 @WebSocketGateway({path: "/ws/room"})
 export class RoomGateway {
+  private log = log.child({class: "RoomGateway"})
+
   @SubscribeMessage("connect")
   onConnect(client: any, data: OnConnection): Observable<WsResponse<number>> {
-    log.info(`roomId: '${data.roomId}'`)
+    this.log.info(`onConnect: roomId: '${data.roomId}'`)
     return from([1, 2, 3]).pipe(map((item) => ({event: "events", data: item})))
   }
 }

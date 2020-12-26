@@ -2,30 +2,11 @@ import {FormEventHandler, useEffect, useRef, useState} from "react"
 import {useParams} from "react-router-dom"
 import tw from "twin.macro"
 import {Room} from "./Home"
+import useWebSocket, {ReadyState} from "react-use-websocket"
 
 interface Message {
   event: string
   data: any
-}
-
-const useWebsocket = (
-  url: string,
-  messageHandler: (message: Message) => void,
-  initialMessage: Message
-) => {
-  useEffect(() => {
-    const ws = new WebSocket(url)
-    ws.addEventListener("open", () => {
-      ws.send(JSON.stringify(initialMessage))
-    })
-
-    ws.addEventListener("message", (event) => {
-      const message = JSON.parse(event.data) as Message
-      messageHandler(message)
-    })
-
-    return () => ws.close()
-  }, [url, initialMessage, messageHandler])
 }
 
 const RoomView: React.FC = () => {
@@ -38,13 +19,24 @@ const RoomView: React.FC = () => {
   const userId = window.localStorage.getItem("userId")
   const videoElement = useRef<HTMLVideoElement>(null)
 
-  useWebsocket("ws://localhost:3090/ws/room", (message) => {}, {
-    event: "connect",
-    data: {
-      roomId: id,
-      userId: userId,
-    },
-  })
+  const {sendJsonMessage, lastMessage, readyState} = useWebSocket("ws://localhost:3090/ws/room")
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
+
+  useEffect(() => {
+    sendJsonMessage({
+      event: "connect",
+      data: {
+        roomId: id,
+        userId: userId,
+      }
+    })
+  }, [id])
 
   const fetchRoom = async (id: string): Promise<void> => {
     try {
@@ -99,11 +91,13 @@ const RoomView: React.FC = () => {
           value={videoUrlInput}
           onChange={(e) => setVideoUrlInput(e.target.value)}
         />
-
         <button type="submit">
           Submit
         </button>
       </form>
+
+      <p>{lastMessage?.data || "no message yet"}</p>
+      <p>{connectionStatus}</p>
 
       <video ref={videoElement}></video>
     </>
