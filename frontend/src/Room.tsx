@@ -19,14 +19,16 @@ const RoomView: React.FC = () => {
   const userId = window.localStorage.getItem("userId")
   const videoElement = useRef<HTMLVideoElement>(null)
 
-  const {sendJsonMessage, lastMessage, readyState} = useWebSocket("ws://localhost:3090/ws/room")
+  const {sendJsonMessage, lastMessage, readyState} = useWebSocket(
+    "ws://localhost:3090/ws/room"
+  )
   const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState];
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState]
 
   useEffect(() => {
     sendJsonMessage({
@@ -34,9 +36,9 @@ const RoomView: React.FC = () => {
       data: {
         roomId: id,
         userId: userId,
-      }
+      },
     })
-  }, [id])
+  }, [id, userId, sendJsonMessage])
 
   const fetchRoom = async (id: string): Promise<void> => {
     try {
@@ -51,15 +53,18 @@ const RoomView: React.FC = () => {
 
   const onAddVideo: FormEventHandler = async (e) => {
     e.preventDefault()
-    
+
     const params = new URLSearchParams({
       url: videoUrlInput,
       userId: userId || "",
     })
 
-    const response = await fetch(`/api/rooms/${id}/video?${params.toString()}`, {
-      method: "POST"
-    })
+    const response = await fetch(
+      `/api/rooms/${id}/video?${params.toString()}`,
+      {
+        method: "POST",
+      }
+    )
 
     if (!response.ok) {
       const json = await response.json()
@@ -91,9 +96,7 @@ const RoomView: React.FC = () => {
           value={videoUrlInput}
           onChange={(e) => setVideoUrlInput(e.target.value)}
         />
-        <button type="submit">
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
 
       <p>{lastMessage?.data || "no message yet"}</p>

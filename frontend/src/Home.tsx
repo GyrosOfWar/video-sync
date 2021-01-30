@@ -45,6 +45,8 @@ const Icon: React.FC = () => (
   </svg>
 )
 
+const BigButton = tw.button`bg-green-200 hover:bg-green-300 dark:bg-gray-700 p-4 rounded-2xl dark:hover:bg-gray-600 transition shadow-lg`
+
 const Home = () => {
   const navigate = useNavigate()
 
@@ -60,16 +62,12 @@ const Home = () => {
   }
 
   return (
-    <div css={tw`flex flex-col`}>
-      <div css={tw`self-center`}>
-        <button
-          onClick={onCreateRoom}
-          css={tw`bg-indigo-100 hover:bg-indigo-200 dark:bg-gray-700 p-4 rounded-2xl dark:hover:bg-gray-600 transition shadow-lg`}
-        >
-          <Icon />
-          <span>New room</span>
-        </button>
-      </div>
+    <div css={tw`flex flex-col items-center`}>
+      <h1 css={tw`text-3xl font-bold mb-4`}>Welcome to video-sync!</h1>
+      <BigButton onClick={onCreateRoom}>
+        <Icon />
+        <span>New room</span>
+      </BigButton>
     </div>
   )
 }
