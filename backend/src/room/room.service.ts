@@ -64,6 +64,8 @@ export class RoomService {
       url: videoUrl,
       addedAt: new Date(),
       addedByUser: userId,
+      id: newUuid(),
+      currentTime: 0,
     }
 
     const room = await this.findOne(roomId)
