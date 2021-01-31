@@ -6,7 +6,15 @@ import useWebSocket, {ReadyState} from "react-use-websocket"
 
 interface Message {
   event: string
-  data: any
+  data: unknown
+}
+
+const connectionStates = {
+  [ReadyState.CONNECTING]: "Connecting",
+  [ReadyState.OPEN]: "Open",
+  [ReadyState.CLOSING]: "Closing",
+  [ReadyState.CLOSED]: "Closed",
+  [ReadyState.UNINSTANTIATED]: "Uninstantiated",
 }
 
 const RoomView: React.FC = () => {
@@ -22,13 +30,7 @@ const RoomView: React.FC = () => {
   const {sendJsonMessage, lastMessage, readyState} = useWebSocket(
     "ws://localhost:3090/ws/room"
   )
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState]
+  const connectionStatus = connectionStates[readyState]
 
   useEffect(() => {
     sendJsonMessage({
@@ -58,17 +60,22 @@ const RoomView: React.FC = () => {
       url: videoUrlInput,
       userId: userId || "",
     })
+    try {
+      const response = await fetch(
+        `/api/rooms/${id}/video?${params.toString()}`,
+        {
+          method: "POST",
+        }
+      )
 
-    const response = await fetch(
-      `/api/rooms/${id}/video?${params.toString()}`,
-      {
-        method: "POST",
+      if (!response.ok) {
+        const json = await response.json()
+        setError(json)
       }
-    )
-
-    if (!response.ok) {
-      const json = await response.json()
-      setError(json)
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e)
+      }
     }
   }
 
@@ -99,7 +106,6 @@ const RoomView: React.FC = () => {
         <button type="submit">Submit</button>
       </form>
 
-      <p>{lastMessage?.data || "no message yet"}</p>
       <p>{connectionStatus}</p>
 
       <video ref={videoElement}></video>

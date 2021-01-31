@@ -10,6 +10,9 @@ export interface Participant {
 }
 
 export interface PlaylistEntry {
+  id: string
+  // current time in milliseconds
+  currentTime: number
   url: string
   addedByUser: string
   addedAt: Date
@@ -17,17 +20,20 @@ export interface PlaylistEntry {
 
 @Schema()
 export class Room {
-  @Prop()
+  @Prop({required: true})
   _id!: string
 
   @Prop({required: true})
   name!: string
 
-  @Prop()
+  @Prop({required: true})
   participants!: Participant[]
 
-  @Prop()
+  @Prop({required: true})
   playlist!: PlaylistEntry[]
+
+  @Prop()
+  currentEntry?: string
 
   @Prop({required: true})
   createdAt!: Date
