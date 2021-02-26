@@ -1,0 +1,25 @@
+# To-Do:
+- [ ] Database setup:
+    - Room table: 
+        - Generated alphanumeric/word-based? ID
+        - Current video (details TBD)
+    - Participants table
+        - Generated/chosen name
+        - IP address?
+        - Unique ID
+    - Playlist table?
+- [ ] Creating a room:
+    - Use RSocket over WebSocket? Raw WebSocket if impractical
+    - Create a new room in the database
+    - Navigate to `/room/{id}`
+    - Create websocket to `/ws/room/{id}` (or `/ws/room` if )
+- [ ] Start a video
+    - Client who requests the video sends a message to `/ws/room/{id}`: `{"event": "AddVideo", "url": "http://example.com"}` (details TBD)
+    - Server adds video to room's playlist, sets the `currentEntry` property
+    - Server does preparations (fetch video if necessary?)
+    - Server sends WS message to all room participats: `{"type": "StartVideo", "serverTime": 1234567}` (details TBD)
+    - Clients periodically send their current video position to the server to make sure they stay in sync
+- [ ] Pinging logic (client)
+    - Keep track of current video time in `state` (with video element event handler)
+    - Start a timer (once every second?) to send a `ping` message with the current client time to the server
+    - If the server replies with a `serverTime`, adjust current video position to the server position
