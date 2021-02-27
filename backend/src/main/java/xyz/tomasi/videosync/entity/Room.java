@@ -1,13 +1,13 @@
 package xyz.tomasi.videosync.entity;
 
 import java.time.ZonedDateTime;
-
 import org.springframework.data.annotation.Id;
 
 public class Room {
 
   @Id
   private long id;
+
   private String name;
   private ZonedDateTime createdAt;
   private long activeVideo;

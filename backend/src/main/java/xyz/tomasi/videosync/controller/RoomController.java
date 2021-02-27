@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import xyz.tomasi.videosync.entity.Room;
@@ -19,7 +18,7 @@ public class RoomController {
   public RoomController(RoomRepository roomRepository) {
     this.roomRepository = roomRepository;
   }
-  
+
   private final RoomRepository roomRepository;
 
   @GetMapping
@@ -29,7 +28,8 @@ public class RoomController {
 
   @GetMapping("{id}")
   public Mono<ResponseEntity<Room>> getSingleRoom(@PathVariable long id) {
-    return roomRepository.findById(id)
+    return roomRepository
+      .findById(id)
       .map(room -> ResponseEntity.ok(room))
       .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
   }
