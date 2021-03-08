@@ -30,7 +30,7 @@ public class RoomController {
   public Mono<ResponseEntity<Room>> getSingleRoom(@PathVariable long id) {
     return roomRepository
       .findById(id)
-      .map(room -> ResponseEntity.ok(room))
+      .map(ResponseEntity::ok)
       .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
   }
 }

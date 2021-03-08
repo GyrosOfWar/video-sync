@@ -1,6 +1,4 @@
-package xyz.tomasi.videosync.dto;
-
-import java.util.UUID;
+package xyz.tomasi.videosync.dto.client;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -14,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
   property = "type"
 )
 @JsonSubTypes({
-  @Type(JoinRoomMessage.class)
+  @Type(JoinRoomRequest.class)
 })
-public interface ClientMessage {
+public sealed interface ClientMessage permits JoinRoomRequest {
 
 }

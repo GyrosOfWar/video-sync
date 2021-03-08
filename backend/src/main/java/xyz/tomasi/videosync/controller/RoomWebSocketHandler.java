@@ -9,35 +9,41 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
-import xyz.tomasi.videosync.dto.ClientMessage;
-import xyz.tomasi.videosync.dto.ServerMessage;
-import xyz.tomasi.videosync.repository.RoomRepository;
+import xyz.tomasi.videosync.dto.client.ClientMessage;
+import xyz.tomasi.videosync.dto.client.JoinRoomRequest;
+import xyz.tomasi.videosync.dto.server.ServerMessage;
+import xyz.tomasi.videosync.service.RoomService;
 
 @Component
 public class RoomWebSocketHandler implements WebSocketHandler {
 
   public RoomWebSocketHandler(
-    RoomRepository roomRepository,
+    RoomService roomService,
     ObjectMapper objectMapper
   ) {
-    this.roomRepository = roomRepository;
+    this.roomService = roomService;
     this.objectMapper = objectMapper;
   }
 
-  private final RoomRepository roomRepository;
+  private final RoomService roomService;
   private final ObjectMapper objectMapper;
 
   private static final Logger log = LoggerFactory.getLogger(
     RoomWebSocketHandler.class
   );
 
-  private int getRoomId(WebSocketSession session) {
+  private long getRoomId(WebSocketSession session) {
     var path = session.getHandshakeInfo().getUri().getPath();
+    try {
+      var segments = path.split("/");
+      var lastSegment = segments[segments.length - 1];
 
-    var segments = path.split("/");
-    var lastSegment = segments[segments.length - 1];
-
-    return Integer.parseInt(lastSegment);
+      return Long.parseLong(lastSegment);
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+        String.format("Failed to parse session URL %s: %s", path, e.getMessage())
+      );
+    }
   }
 
   private ClientMessage parseMessage(WebSocketMessage message) {
@@ -51,8 +57,12 @@ public class RoomWebSocketHandler implements WebSocketHandler {
     }
   }
 
-  private Mono<ServerMessage> handleMessage(ClientMessage incoming) {
-    throw new RuntimeException("not implemented");
+  private Mono<ServerMessage> handleMessage(long roomId, ClientMessage incoming) {
+    if (incoming instanceof JoinRoomRequest msg) {
+      return roomService.onRoomJoined(roomId, msg);
+    } else {
+      throw new RuntimeException("unknown message " + incoming);
+    }
   }
 
   private Mono<WebSocketMessage> prepareResponse(
@@ -83,7 +93,7 @@ public class RoomWebSocketHandler implements WebSocketHandler {
       .flatMap(
         msg ->
           session.send(
-            this.handleMessage(msg)
+            this.handleMessage(roomId, msg)
               .flatMap(response -> this.prepareResponse(response, session))
           )
       )
