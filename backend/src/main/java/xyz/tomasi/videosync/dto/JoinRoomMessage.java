@@ -1,5 +1,7 @@
 package xyz.tomasi.videosync.dto;
 
-public class JoinRoomMessage implements ClientMessage {
-    
+public record JoinRoomMessage(
+  String participantName
+) implements ClientMessage {
+
 }
