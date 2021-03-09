@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS participant (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "name" VARCHAR NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL,
-    room_id BIGINT REFERENCES room (id)
+    created_at TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS video (
@@ -19,3 +18,5 @@ CREATE TABLE IF NOT EXISTS room (
     created_at TIMESTAMPTZ NOT NULL,
     active_video BIGINT REFERENCES video (id)
 );
+
+ALTER TABLE participant ADD COLUMN IF NOT EXISTS room_id BIGINT REFERENCES room (id);

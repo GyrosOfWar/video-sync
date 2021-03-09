@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import xyz.tomasi.videosync.dto.client.ClientMessage;
-import xyz.tomasi.videosync.dto.client.JoinRoomRequest;
 
 class ClientMessageDeserializationTest {
 
@@ -16,7 +15,7 @@ class ClientMessageDeserializationTest {
     var json =
       """
     {
-      "type": "JoinRoomMessage",
+      "type": "joinRoom",
       "participantName": "foo"
     }
     """;
@@ -25,7 +24,7 @@ class ClientMessageDeserializationTest {
 
     Assertions
       .assertThat(result)
-      .isInstanceOf(JoinRoomRequest.class)
+      .isInstanceOf(ClientMessage.JoinRoomRequest.class)
       .extracting("participantName")
       .asInstanceOf(InstanceOfAssertFactories.STRING)
       .isEqualTo("foo");

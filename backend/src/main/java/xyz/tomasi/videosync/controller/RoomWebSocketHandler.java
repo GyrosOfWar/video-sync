@@ -10,7 +10,6 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 import xyz.tomasi.videosync.dto.client.ClientMessage;
-import xyz.tomasi.videosync.dto.client.JoinRoomRequest;
 import xyz.tomasi.videosync.dto.server.ServerMessage;
 import xyz.tomasi.videosync.service.RoomService;
 
@@ -58,8 +57,8 @@ public class RoomWebSocketHandler implements WebSocketHandler {
   }
 
   private Mono<ServerMessage> handleMessage(long roomId, ClientMessage incoming) {
-    if (incoming instanceof JoinRoomRequest msg) {
-      return roomService.onRoomJoined(roomId, msg);
+    if (incoming instanceof ClientMessage.JoinRoomRequest msg) {
+      return roomService.onRoomJoined(roomId, msg.participantName());
     } else {
       throw new RuntimeException("unknown message " + incoming);
     }

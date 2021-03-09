@@ -8,12 +8,18 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 @JsonTypeInfo(
   use = Id.NAME,
-  include = As.PROPERTY,
   property = "type"
 )
 @JsonSubTypes({
-  @Type(JoinRoomRequest.class)
+  @Type(value = ClientMessage.JoinRoomRequest.class, name = "joinRoom"),
+  @Type(value = ClientMessage.Ping.class, name = "ping")
 })
-public sealed interface ClientMessage permits JoinRoomRequest {
+public sealed interface ClientMessage permits ClientMessage.JoinRoomRequest, ClientMessage.Ping {
+
+  record JoinRoomRequest(
+    String participantName
+  ) implements ClientMessage { }
+
+  record Ping() implements ClientMessage { }
 
 }
