@@ -48,7 +48,7 @@ public class RoomService {
       .save(room)
       .flatMap(
         newRoom ->
-          onRoomJoined(newRoom.id(), initialParticipantName)
+          onRoomJoined(newRoom.getId(), initialParticipantName)
             .then(Mono.just(newRoom))
       );
   }
