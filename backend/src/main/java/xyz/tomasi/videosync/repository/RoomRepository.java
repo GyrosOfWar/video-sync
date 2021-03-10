@@ -1,6 +1,7 @@
 package xyz.tomasi.videosync.repository;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import xyz.tomasi.videosync.entity.Room;
 
-public interface RoomRepository extends ReactiveCrudRepository<Room, Long>, RoomRepositoryCustom {}
+public interface RoomRepository extends ReactiveMongoRepository<Room, ObjectId>, RoomRepositoryCustom {}

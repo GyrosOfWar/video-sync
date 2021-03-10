@@ -2,6 +2,7 @@ package xyz.tomasi.videosync.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,13 @@ public class RoomWebSocketHandler implements WebSocketHandler {
     RoomWebSocketHandler.class
   );
 
-  private long getRoomId(WebSocketSession session) {
+  private ObjectId getRoomId(WebSocketSession session) {
     var path = session.getHandshakeInfo().getUri().getPath();
     try {
       var segments = path.split("/");
       var lastSegment = segments[segments.length - 1];
 
-      return Long.parseLong(lastSegment);
+      return new ObjectId(lastSegment);
     } catch (Exception e) {
       throw new IllegalArgumentException(
         String.format("Failed to parse session URL %s: %s", path, e.getMessage())
@@ -56,7 +57,7 @@ public class RoomWebSocketHandler implements WebSocketHandler {
     }
   }
 
-  private Mono<ServerMessage> handleMessage(long roomId, ClientMessage incoming) {
+  private Mono<ServerMessage> handleMessage(ObjectId roomId, ClientMessage incoming) {
     if (incoming instanceof ClientMessage.JoinRoomRequest msg) {
       return roomService.onRoomJoined(roomId, msg.participantName());
     } else {

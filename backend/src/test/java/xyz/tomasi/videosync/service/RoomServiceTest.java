@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.test.StepVerifier;
-import xyz.tomasi.videosync.repository.ParticipantRepository;
 import xyz.tomasi.videosync.repository.RoomRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,15 +16,11 @@ class RoomServiceTest {
   private RoomRepository roomRepository;
 
   @Autowired
-  private ParticipantRepository participantRepository;
-
-  @Autowired
   private RoomService roomService;
 
   @BeforeEach
   void beforeEach() {
     roomRepository.deleteAll();
-    participantRepository.deleteAll();
   }
 
   @Test

@@ -1,13 +1,26 @@
 package xyz.tomasi.videosync.dto;
 
-import java.time.ZonedDateTime;
+import xyz.tomasi.videosync.entity.Participant;
+import xyz.tomasi.videosync.entity.Room;
+import xyz.tomasi.videosync.entity.Video;
+
+import java.time.Instant;
 import java.util.List;
 
 public record RoomDto(
-  long id,
+  String id,
   String name,
-  ZonedDateTime createdAt,
-  List<ParticipantDto> participants,
-  List<VideoDto> playlist
+  Instant createdAt,
+  List<Participant> participants,
+  List<Video> videos
 ) {
+  public static RoomDto from(Room room) {
+    return new RoomDto(
+      room.getId().toHexString(),
+      room.getName(),
+      room.getCreatedAt(),
+      room.getParticipants(),
+      room.getVideos()
+    );
+  }
 }

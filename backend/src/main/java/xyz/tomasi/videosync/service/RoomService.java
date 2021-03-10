@@ -1,6 +1,9 @@
 package xyz.tomasi.videosync.service;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -8,7 +11,6 @@ import reactor.core.publisher.Mono;
 import xyz.tomasi.videosync.dto.ServerMessage;
 import xyz.tomasi.videosync.entity.Participant;
 import xyz.tomasi.videosync.entity.Room;
-import xyz.tomasi.videosync.repository.ParticipantRepository;
 import xyz.tomasi.videosync.repository.RoomRepository;
 
 @Service
@@ -16,25 +18,22 @@ public class RoomService {
 
   private static final Logger log = LoggerFactory.getLogger(RoomService.class);
 
-  public RoomService(
-    ParticipantRepository participantRepository,
-    RoomRepository roomRepository
-  ) {
-    this.participantRepository = participantRepository;
+  public RoomService(RoomRepository roomRepository) {
     this.roomRepository = roomRepository;
   }
 
-  private final ParticipantRepository participantRepository;
   private final RoomRepository roomRepository;
 
-  public Mono<ServerMessage> onRoomJoined(long roomId, String participantName) {
+  public Mono<ServerMessage> onRoomJoined(ObjectId roomId, String participantName) {
     log.info("participant {} joined room {}", participantName, roomId);
-    return participantRepository
-      .save(new Participant(participantName, roomId))
-      .map(
-        participant ->
-          new ServerMessage.JoinRoomConfirmation(participant.getId(), roomId)
-      );
+    throw new RuntimeException("not implemented");
+
+//    return participantRepository
+//      .save(new Participant(participantName, roomId))
+//      .map(
+//        participant ->
+//          new ServerMessage.JoinRoomConfirmation(participant.getId(), roomId)
+//      );
   }
 
   public Mono<Room> createRoom(String name, String initialParticipantName) {
@@ -43,7 +42,8 @@ public class RoomService {
       name,
       initialParticipantName
     );
-    var room = new Room(null, name, ZonedDateTime.now(), null);
+    var participants = List.of(new Participant(initialParticipantName, Instant.now()));
+    var room = new Room(null, name, Instant.now(), null, participants, List.of());
     return roomRepository
       .save(room)
       .flatMap(
