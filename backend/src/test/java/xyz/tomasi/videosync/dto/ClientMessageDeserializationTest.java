@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
-import xyz.tomasi.videosync.dto.client.ClientMessage;
 
 class ClientMessageDeserializationTest {
 

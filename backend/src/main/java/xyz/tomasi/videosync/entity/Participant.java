@@ -7,7 +7,6 @@ public class Participant {
 
   @Id
   private final Long id;
-
   private final String name;
   private final long roomId;
   private final ZonedDateTime createdAt;

@@ -1,4 +1,4 @@
-package xyz.tomasi.videosync.dto.server;
+package xyz.tomasi.videosync.dto;
 
 public sealed interface ServerMessage permits ServerMessage.JoinRoomConfirmation {
 

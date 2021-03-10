@@ -9,8 +9,8 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
-import xyz.tomasi.videosync.dto.client.ClientMessage;
-import xyz.tomasi.videosync.dto.server.ServerMessage;
+import xyz.tomasi.videosync.dto.ClientMessage;
+import xyz.tomasi.videosync.dto.ServerMessage;
 import xyz.tomasi.videosync.service.RoomService;
 
 @Component

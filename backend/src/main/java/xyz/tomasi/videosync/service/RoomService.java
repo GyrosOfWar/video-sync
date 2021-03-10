@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import xyz.tomasi.videosync.dto.server.ServerMessage;
+import xyz.tomasi.videosync.dto.ServerMessage;
 import xyz.tomasi.videosync.entity.Participant;
 import xyz.tomasi.videosync.entity.Room;
 import xyz.tomasi.videosync.repository.ParticipantRepository;

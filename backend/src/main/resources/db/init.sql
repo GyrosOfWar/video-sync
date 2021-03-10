@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS video (
     "url" VARCHAR NOT NULL,
     added_by BIGINT REFERENCES participant (id) NOT NULL,
     added_at TIMESTAMPTZ NOT NULL,
-    "current_time" INTEGER NOT NULL
+    "current_time_millis" INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS room (
@@ -20,3 +20,4 @@ CREATE TABLE IF NOT EXISTS room (
 );
 
 ALTER TABLE participant ADD COLUMN IF NOT EXISTS room_id BIGINT REFERENCES room (id);
+ALTER TABLE video ADD COLUMN IF NOT EXISTS room_id BIGINT REFERENCES room (id) NOT NULL;
