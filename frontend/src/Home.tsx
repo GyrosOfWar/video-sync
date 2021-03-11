@@ -14,7 +14,7 @@ export interface PlaylistEntry {
 }
 
 export interface Room {
-  _id: string
+  id: string
   name: string
   participants: Participant[]
   playlist: PlaylistEntry[]

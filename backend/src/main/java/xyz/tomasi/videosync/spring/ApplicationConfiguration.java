@@ -1,7 +1,8 @@
 package xyz.tomasi.videosync.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bson.types.ObjectId;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.HandlerMapping;
@@ -9,9 +10,6 @@ import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import xyz.tomasi.videosync.controller.RoomWebSocketHandler;
 import xyz.tomasi.videosync.service.RoomService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootConfiguration
 public class ApplicationConfiguration {
