@@ -1,25 +1,16 @@
 # To-Do:
-- [ ] Database setup:
-    - Room table: 
-        - Generated alphanumeric/word-based? ID
-        - Current video (details TBD)
-    - Participants table
-        - Generated/chosen name
-        - IP address?
-        - Unique ID
-    - Playlist table?
 - [ ] Creating a room:
-    - Use RSocket over WebSocket? Raw WebSocket if impractical
-    - Create a new room in the database
+    - Create a new room in the database (`POST /api/rooms`)
     - Navigate to `/room/{id}`
-    - Create websocket to `/ws/room/{id}` (or `/ws/room` if )
+    - Create websocket to `/ws/room/{id}`
+    - Send `JoinRoomRequest` message as JSON
 - [ ] Start a video
-    - Client who requests the video sends a message to `/ws/room/{id}`: `{"event": "AddVideo", "url": "http://example.com"}` (details TBD)
-    - Server adds video to room's playlist, sets the `currentEntry` property
-    - Server does preparations (fetch video if necessary?)
+    - Send a request to `POST /api/rooms/{id}/video` with some data about the video (mostly just the URL?)
+    - OR: Send a Websocket message with the video URL
     - Server sends WS message to all room participats: `{"type": "StartVideo", "serverTime": 1234567}` (details TBD)
     - Clients periodically send their current video position to the server to make sure they stay in sync
 - [ ] Pinging logic (client)
     - Keep track of current video time in `state` (with video element event handler)
-    - Start a timer (once every second?) to send a `ping` message with the current client time to the server
+    - Start a timer (once every 5 seconds?) to send a `ping` message with the current client time to the server
     - If the server replies with a `serverTime`, adjust current video position to the server position
+    - The server should be the source of truth for the actual position of the video (I think).
