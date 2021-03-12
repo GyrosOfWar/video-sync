@@ -1,7 +1,13 @@
 package xyz.tomasi.videosync.service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +22,28 @@ import xyz.tomasi.videosync.repository.RoomRepository;
 public class RoomService {
 
   private static final Logger log = LoggerFactory.getLogger(RoomService.class);
+  private static final List<String> ADJECTIVES = readLines(
+    "/text/adjectives.txt"
+  );
+  private static final List<String> NOUNS = readLines("/text/nouns.txt");
+  private static final Random RANDOM = new Random();
+
+  private static List<String> readLines(String classPath) {
+    var inputStream = RoomService.class.getResourceAsStream(classPath);
+    try {
+      var string = new String(
+        inputStream.readAllBytes(),
+        StandardCharsets.UTF_8
+      );
+      return Arrays
+        .stream(string.split("\n"))
+        .filter(line -> line.length() > 0)
+        .collect(Collectors.toList());
+    } catch (IOException e) {
+      log.error("Failed to open file " + classPath + ": " + e.getMessage(), e);
+      return Collections.emptyList();
+    }
+  }
 
   public RoomService(RoomRepository roomRepository) {
     this.roomRepository = roomRepository;
@@ -34,7 +62,7 @@ public class RoomService {
       .flatMap(
         room -> {
           room
-            .getParticipants()
+            .participants()
             .add(new Participant(participantName, Instant.now()));
           return roomRepository.save(room);
         }
@@ -66,5 +94,12 @@ public class RoomService {
       List.of()
     );
     return roomRepository.save(room);
+  }
+
+  public String generateRandomName() {
+    var adjective = ADJECTIVES.get(RANDOM.nextInt(ADJECTIVES.size()));
+    var noun = NOUNS.get(RANDOM.nextInt(NOUNS.size()));
+
+    return adjective + "-" + noun;
   }
 }

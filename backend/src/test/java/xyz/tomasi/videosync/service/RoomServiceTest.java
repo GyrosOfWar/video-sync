@@ -30,9 +30,9 @@ class RoomServiceTest {
       .create(roomService.createRoom("new-room", "person"))
       .assertNext(
         room -> {
-          assertNotNull(room.getId());
-          assertEquals("new-room", room.getName());
-          assertEquals(1, room.getParticipants().size());
+          assertNotNull(room.id());
+          assertEquals("new-room", room.name());
+          assertEquals(1, room.participants().size());
         }
       )
       .verifyComplete();

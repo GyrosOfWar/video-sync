@@ -16,11 +16,11 @@ public record RoomDto(
 ) {
   public static RoomDto from(Room room) {
     return new RoomDto(
-      room.getId().toHexString(),
-      room.getName(),
-      room.getCreatedAt(),
-      room.getParticipants(),
-      room.getVideos()
+      room.id().toHexString(),
+      room.name(),
+      room.createdAt(),
+      room.participants(),
+      room.videos()
     );
   }
 }
