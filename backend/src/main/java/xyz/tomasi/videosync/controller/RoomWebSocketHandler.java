@@ -59,7 +59,9 @@ public class RoomWebSocketHandler implements WebSocketHandler {
 
   private Mono<ServerMessage> handleMessage(ObjectId roomId, ClientMessage incoming) {
     if (incoming instanceof ClientMessage.JoinRoomRequest msg) {
-      return roomService.onRoomJoined(roomId, msg.participantName());
+      return roomService.onRoomJoined(roomId);
+    } else if (incoming instanceof ClientMessage.Ping msg) {
+      return roomService.onPing(roomId, msg.videoId(), msg.participantId(), msg.currentTimeMillis());
     } else {
       throw new RuntimeException("unknown message " + incoming);
     }

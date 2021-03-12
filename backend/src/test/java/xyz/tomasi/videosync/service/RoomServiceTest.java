@@ -23,18 +23,4 @@ class RoomServiceTest {
   void beforeEach() {
     roomRepository.deleteAll();
   }
-
-  @Test
-  void saveRoom() {
-    StepVerifier
-      .create(roomService.createRoom("new-room", "person"))
-      .assertNext(
-        room -> {
-          assertNotNull(room.id());
-          assertEquals("new-room", room.name());
-          assertEquals(1, room.participants().size());
-        }
-      )
-      .verifyComplete();
-  }
 }

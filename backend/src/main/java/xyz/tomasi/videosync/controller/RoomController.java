@@ -61,7 +61,7 @@ public class RoomController {
   @PostMapping
   public Mono<RoomDto> createRoom() {
     var userName = roomService.generateRandomName();
-    var participant = new Participant(userName, Instant.now());
+    var participant = new Participant(userName);
     var room = new Room(
       null,
       roomService.generateRandomName(),

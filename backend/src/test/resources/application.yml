@@ -1,5 +1,4 @@
 spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/video-sync-test
-    username: "${DB_USERNAME}"
-    password: "${DB_PASSWORD}"
+  data:
+    mongodb:
+      database: video-sync-test

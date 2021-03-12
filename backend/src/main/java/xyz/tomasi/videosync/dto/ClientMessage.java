@@ -1,5 +1,7 @@
 package xyz.tomasi.videosync.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -15,10 +17,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 })
 public sealed interface ClientMessage permits ClientMessage.JoinRoomRequest, ClientMessage.Ping {
 
-  record JoinRoomRequest(
-    String participantName
-  ) implements ClientMessage { }
+  record JoinRoomRequest() implements ClientMessage { }
 
-  record Ping() implements ClientMessage { }
+  record Ping(
+    UUID videoId,
+    int currentTimeMillis,
+    String participantId
+  ) implements ClientMessage { }
 
 }
