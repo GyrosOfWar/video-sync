@@ -1,5 +1,10 @@
 package xyz.tomasi.videosync.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,12 +13,6 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
-
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class RoomWebSocketHandlerTest {
@@ -29,9 +28,9 @@ class RoomWebSocketHandlerTest {
     var session = mock(WebSocketSession.class);
     when(session.getHandshakeInfo()).thenReturn(info);
 
-//    when(session.receive()).thenReturn(
-//
-//    );
+    //    when(session.receive()).thenReturn(
+    //
+    //    );
 
     handler.handle(session).block();
   }

@@ -1,6 +1,6 @@
 package xyz.tomasi.videosync.dto;
 
-public sealed interface ServerMessage permits ServerMessage.JoinRoomConfirmation, ServerMessage.Pong, ServerMessage.OutOfSync {
+public interface ServerMessage {
 
   record JoinRoomConfirmation(
     String participantName,

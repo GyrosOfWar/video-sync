@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
   @Type(value = ClientMessage.JoinRoomRequest.class, name = "joinRoom"),
   @Type(value = ClientMessage.Ping.class, name = "ping")
 })
-public sealed interface ClientMessage permits ClientMessage.JoinRoomRequest, ClientMessage.Ping {
+public interface ClientMessage {
 
   record JoinRoomRequest() implements ClientMessage { }
 
