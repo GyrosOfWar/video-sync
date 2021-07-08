@@ -1,4 +1,4 @@
-import {FormEventHandler, useEffect, useRef, useState} from "react"
+import React, {FormEventHandler, useEffect, useRef, useState} from "react"
 import {useParams} from "react-router-dom"
 /** @jsxImportSource @emotion/react */
 import tw from 'twin.macro'
@@ -29,7 +29,7 @@ const RoomView: React.FC = () => {
   const videoElement = useRef<HTMLVideoElement>(null)
 
   const {sendJsonMessage, lastMessage, readyState} = useWebSocket(
-    "ws://localhost:3090/ws/room"
+    `ws://localhost:8080/ws/room/${id}`
   )
   const connectionStatus = connectionStates[readyState]
 
@@ -107,7 +107,7 @@ const RoomView: React.FC = () => {
         <button type="submit">Submit</button>
       </form>
 
-      <p>{connectionStatus}</p>
+      <p><strong>Connection status:</strong> {connectionStatus}</p>
 
       <video ref={videoElement}></video>
     </>

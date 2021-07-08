@@ -1,7 +1,7 @@
 import React from "react"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
-import Home from "./Home"
-import Room from "./Room"
+import Home from "./pages/Home"
+import Room from "./pages/Room"
 /** @jsxImportSource @emotion/react */
 import tw from 'twin.macro'
 

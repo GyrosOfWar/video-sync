@@ -7,7 +7,7 @@ import java.util.UUID;
 public record Video(
   UUID id, URI url, String addedBy, Instant addedAt, int currentTimeMillis
 ) {
-  public Video(URI url, String addedBy) {
-    this(UUID.randomUUID(), url, addedBy, Instant.now(), 0);
+  public static Video fromUrl(URI url, String addedBy) {
+    return new Video(UUID.randomUUID(), url, addedBy, Instant.now(), 0);
   }
 }

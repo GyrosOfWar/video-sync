@@ -98,8 +98,9 @@ public class RoomWebSocketHandler implements WebSocketHandler {
 
   @Override
   public Mono<Void> handle(WebSocketSession session) {
+    log.info("Handling connection {}", session.getId());
     var roomId = getRoomId(session);
-    log.info("receiving session, room ID: {}", roomId);
+    log.info("Found room ID {} for connection {}", roomId, session.getId());
 
     return session
       .receive()

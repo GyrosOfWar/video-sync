@@ -63,7 +63,7 @@ public class RoomService {
       .findById(roomId)
       .flatMap(
         room -> {
-          room.participants().add(new Participant(participantName));
+          room.participants().add(Participant.withName(participantName));
           return roomRepository.save(room);
         }
       )

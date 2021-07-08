@@ -1,5 +1,6 @@
 package xyz.tomasi.videosync.controller;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 import xyz.tomasi.videosync.dto.RoomDto;
 import xyz.tomasi.videosync.entity.Participant;
 import xyz.tomasi.videosync.entity.Room;
+import xyz.tomasi.videosync.entity.Video;
 import xyz.tomasi.videosync.repository.RoomRepository;
 import xyz.tomasi.videosync.service.RoomService;
 
@@ -61,7 +63,7 @@ public class RoomController {
   @PostMapping
   public Mono<RoomDto> createRoom() {
     var userName = roomService.generateRandomName();
-    var participant = new Participant(userName);
+    var participant = Participant.withName(userName);
     var room = new Room(
       null,
       roomService.generateRandomName(),
@@ -74,5 +76,20 @@ public class RoomController {
     log.info("generated room {}", room);
 
     return roomRepository.save(room).map(RoomDto::from);
+  }
+
+  @PostMapping("{id}/video")
+  public Mono<Void> addVideo(
+    @PathVariable ObjectId id,
+    @RequestParam URI url,
+    @RequestParam String userId
+  ) {
+   log.info("adding video {} to room {} by user {}", url, id, userId);
+    return roomRepository.findById(id)
+      .flatMap(room -> {
+        room.videos().add(Video.fromUrl(url, userId));
+        return roomRepository.save(room);
+      })
+      .then();
   }
 }

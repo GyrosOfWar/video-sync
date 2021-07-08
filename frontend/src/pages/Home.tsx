@@ -23,13 +23,6 @@ export interface Room {
   createdAt: Date
 }
 
-export interface CreateRoomResponse {
-  roomName: string
-  roomId: string
-  userName: string
-  userId: string
-}
-
 const Icon: React.FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -57,10 +50,14 @@ const Home = () => {
       method: "POST",
       headers: {"Content-Type": "application/json"},
     })
-    const data: CreateRoomResponse = await response.json()
-    window.localStorage.setItem("userId", data.userId)
+    if (response.ok) {
+      const data: Room = await response.json()
+      window.localStorage.setItem("userId", data.participants[0].id)
 
-    navigate(`/rooms/${data.roomId}`)
+      navigate(`/rooms/${data.id}`)
+    } else {
+      console.error(await response.json())
+    }
   }
 
   return (
