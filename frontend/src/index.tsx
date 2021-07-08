@@ -1,13 +1,21 @@
+import { css, Global } from "@emotion/react"
 import React from "react"
 import ReactDOM from "react-dom"
 import {GlobalStyles} from "twin.macro"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
-import "./index.css"
+/** @jsxImportSource @emotion/react */
+import tw from 'twin.macro'
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyles />
+    <Global styles={css`
+      body {
+        ${tw`dark:bg-gray-900 dark:text-white`}
+        }
+      }      
+    `} />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

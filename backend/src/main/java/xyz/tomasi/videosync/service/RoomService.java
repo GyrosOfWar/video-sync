@@ -16,12 +16,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import xyz.tomasi.videosync.dto.ServerMessage;
 import xyz.tomasi.videosync.entity.Participant;
+import xyz.tomasi.videosync.entity.Video;
 import xyz.tomasi.videosync.repository.RoomRepository;
 
 @Service
 public class RoomService {
 
-  private static final int MAX_TIME_DELTA = 2000;
+  private static final int MAX_TIME_DELTA = 500;
 
   private static final Logger log = LoggerFactory.getLogger(RoomService.class);
   private static final List<String> ADJECTIVES = readLines(
@@ -97,7 +98,7 @@ public class RoomService {
             .stream()
             .filter(v -> v.id().equals(videoId))
             .findFirst()
-            .map(v -> v.currentTimeMillis())
+            .map(Video::currentTimeMillis)
             .get();
           // TODO probably too simplistic
           var difference = Math.abs(currentTimeMillis - serverTime);

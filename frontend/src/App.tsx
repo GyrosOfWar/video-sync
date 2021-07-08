@@ -1,8 +1,9 @@
 import React from "react"
-import tw from "twin.macro"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Home from "./Home"
 import Room from "./Room"
+/** @jsxImportSource @emotion/react */
+import tw from 'twin.macro'
 
 const NotFound = () => <p>404 - Not found</p>
 

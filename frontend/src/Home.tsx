@@ -1,5 +1,7 @@
 import {useNavigate} from "react-router-dom"
-import tw from "twin.macro"
+/** @jsxImportSource @emotion/react */
+import tw from 'twin.macro'
+
 
 export interface Participant {
   name: string
